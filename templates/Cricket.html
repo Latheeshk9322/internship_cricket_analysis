@@ -1,0 +1,168 @@
+
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Score Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f3f4f6;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cricket Score Predictor</h1>
+        <form id="predictor-form">
+            <div class="form-group">
+                <label for="overs">Overs Played</label>
+                <input type="number" id="overs" name="overs" min="0" max="50" required>
+            </div>
+
+            <div class="form-group">
+                <label for="wickets">Wickets Lost</label>
+                <input type="number" id="wickets" name="wickets" min="0" max="10" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Run_Rate">Run Rate</label>
+                <input type="number" step="0.01" id="Run_Rate" name="Run_Rate" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Home_Away">Home/Away</label>
+                <select id="Home_Away" name="Home_Away" required>
+                    <option value="">-- Select --</option>
+                    <option value="Home">Home</option>
+                    <option value="Away">Away</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Opponent_Strength">Opponent Strength</label>
+                <input type="number" id="Opponent_Strength" name="Opponent_Strength" min="0" max="10" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Pitch_Condition">Pitch Condition</label>
+                <select id="Pitch_Condition" name="Pitch_Condition" required>
+                    <option value="">-- Select --</option>
+                    <option value="Batting">Batting Friendly</option>
+                    <option value="Bowling">Bowling Friendly</option>
+                    <option value="Neutral">Neutral</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Weather">Weather</label>
+                <select id="Weather" name="Weather" required>
+                    <option value="">-- Select --</option>
+                    <option value="Clear">Clear</option>
+                    <option value="Cloudy">Cloudy</option>
+                    <option value="Rainy">Rainy</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn" onclick="predictScore()">Predict Score</button>
+        </form>
+
+        <div class="Predicted_Score" id="Predicted_Score"></div>
+    </div>
+
+    <script>
+    
+    function predictScore() {
+    const data = {
+        overs: document.getElementById('overs').value,
+        wickets: document.getElementById('wickets').value,
+        Run_Rate: document.getElementById('Run_Rate').value,
+        Home_Away: document.getElementById('Home_Away').value,
+        Opponent_Strength: document.getElementById('Opponent_Strength').value,
+        Pitch_Condition: document.getElementById('Pitch_Condition').value,
+        Weather: document.getElementById('Weather').value
+    };
+
+    fetch('/predictscore', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        document.getElementById('Predicted_Score').textContent = `Predicted_Score: ${result.predicted_Score}`;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('Predicted_Score').textContent = ' score.';
+    });
+}
+
+    </script>
+</body>
+</html>
