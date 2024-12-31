@@ -1,6 +1,4 @@
-
-
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -97,8 +95,8 @@
                 <label for="Home_Away">Home/Away</label>
                 <select id="Home_Away" name="Home_Away" required>
                     <option value="">-- Select --</option>
-                    <option value="Home">Home</option>
-                    <option value="Away">Away</option>
+                    <option value="1">Home</option>
+                    <option value="0">Away</option>
                 </select>
             </div>
 
@@ -111,9 +109,9 @@
                 <label for="Pitch_Condition">Pitch Condition</label>
                 <select id="Pitch_Condition" name="Pitch_Condition" required>
                     <option value="">-- Select --</option>
-                    <option value="Batting">Batting Friendly</option>
-                    <option value="Bowling">Bowling Friendly</option>
-                    <option value="Neutral">Neutral</option>
+                    <option value="1">Batting Friendly</option>
+                    <option value="2">Bowling Friendly</option>
+                    <option value="0">Balanced</option>
                 </select>
             </div>
 
@@ -121,48 +119,50 @@
                 <label for="Weather">Weather</label>
                 <select id="Weather" name="Weather" required>
                     <option value="">-- Select --</option>
-                    <option value="Clear">Clear</option>
-                    <option value="Cloudy">Cloudy</option>
-                    <option value="Rainy">Rainy</option>
+                    <option value="2">Sunny</option>
+                    <option value="1">Overcast</option>
+                    <option value="0">Cloudy</option>
                 </select>
             </div>
 
             <button type="button" class="btn" onclick="predictScore()">Predict Score</button>
         </form>
 
-        <div class="Predicted_Score" id="Predicted_Score"></div>
+        <div class="result" id="Predicted_Score"></div>
     </div>
 
     <script>
-    
-    function predictScore() {
-    const data = {
-        overs: document.getElementById('overs').value,
-        wickets: document.getElementById('wickets').value,
-        Run_Rate: document.getElementById('Run_Rate').value,
-        Home_Away: document.getElementById('Home_Away').value,
-        Opponent_Strength: document.getElementById('Opponent_Strength').value,
-        Pitch_Condition: document.getElementById('Pitch_Condition').value,
-        Weather: document.getElementById('Weather').value
-    };
+        function predictScore() {
+            const data = {
+                overs: document.getElementById('overs').value,
+                wickets: document.getElementById('wickets').value,
+                Run_Rate: document.getElementById('Run_Rate').value,
+                Home_Away: document.getElementById('Home_Away').value,
+                Opponent_Strength: document.getElementById('Opponent_Strength').value,
+                Pitch_Condition: document.getElementById('Pitch_Condition').value,
+                Weather: document.getElementById('Weather').value
+            };
 
-    fetch('/predictscore', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-        document.getElementById('Predicted_Score').textContent = `Predicted_Score: ${result.predicted_Score}`;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        document.getElementById('Predicted_Score').textContent = ' score.';
-    });
-}
-
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.error) {
+                        document.getElementById('Predicted_Score').textContent = `Error: ${result.error}`;
+                    } else {
+                        document.getElementById('Predicted_Score').textContent = `Predicted Score: ${result.predicted_Score}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('Predicted_Score').textContent = 'An error occurred while predicting the score.';
+                });
+        }
     </script>
 </body>
 </html>
