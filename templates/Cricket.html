@@ -6,30 +6,44 @@
     <title>Cricket Score Predictor</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: url('Dataset/cricket.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #490bd9;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* Blurred Background */
+        .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/static/cricket.jpg') no-repeat bottom;
+        background-size: cover;
+        opacity: 0.6; /* 60% visibility */
+        z-index: -1;
+}
+
         .container {
-            background-color: #bec3de;
+            background-color: rgba(0, 0, 0, 0.8);
             padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
             width: 100%;
             max-width: 400px;
+            position: relative; /* Ensures content appears above background */
         }
 
         h1 {
             text-align: center;
-            color: #a71b1b;
+            color: #ffcc00;
         }
 
         .form-group {
@@ -40,7 +54,6 @@
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
-            color: #333;
         }
 
         .form-group input,
@@ -49,33 +62,75 @@
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            background-color: #fff;
+            color: #000;
         }
 
         .btn {
             display: block;
             width: 100%;
             padding: 10px;
-            background-color: #a71b1b;
+            background-color: #ff6600;
             color: white;
             font-size: 16px;
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         .btn:hover {
-            background-color: #0056b3;
+            background-color: #cc3300;
+            transform: scale(1.05);
         }
 
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #333;
+        /* Popup Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 300px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #fff;
+            border-radius: 10px;
             text-align: center;
+            padding: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .modal.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        .modal .close-btn {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .modal .close-btn:hover {
+            background-color: #cc3300;
         }
     </style>
 </head>
 <body>
+    <!-- Blurred Background -->
+    <div class="background"></div>
+
+
     <div class="container">
         <h1>Cricket Score Predictor</h1>
         <form id="predictor-form">
@@ -123,7 +178,13 @@
             </div>
             <button type="button" class="btn" onclick="predictScore()">Predict Score</button>
         </form>
-        <div class="result" id="Predicted_Score"></div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div class="modal" id="scoreModal">
+        <h2>Predicted Score</h2>
+        <p id="modalScore">--</p>
+        <button class="close-btn" onclick="closeModal()">Close</button>
     </div>
 
     <script>
@@ -148,14 +209,27 @@
                 const result = await response.json();
 
                 if (response.ok && result.predicted_Score !== undefined) {
-                    document.getElementById('Predicted_Score').textContent = `Predicted Score: ${result.predicted_Score}`;
+                    document.getElementById('modalScore').textContent = result.predicted_Score;
+                    showModal();
                 } else {
-                    document.getElementById('Predicted_Score').textContent = `Error: ${result.error || 'Unexpected server response'}`;
+                    document.getElementById('modalScore').textContent = 'Error: Unable to predict score.';
+                    showModal();
                 }
             } catch (error) {
                 console.error('Error:', error);
-                document.getElementById('Predicted_Score').textContent = 'An error occurred while predicting the score.';
+                document.getElementById('modalScore').textContent = 'An error occurred.';
+                showModal();
             }
+        }
+
+        function showModal() {
+            const modal = document.getElementById('scoreModal');
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('scoreModal');
+            modal.classList.remove('show');
         }
     </script>
 </body>

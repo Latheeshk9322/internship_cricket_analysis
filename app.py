@@ -39,7 +39,7 @@ def predict():
 
         # Load the model and make a prediction
         prediction = model.predict(input_data)
-        predicted_score = round(float(prediction[0]), 2)
+        predicted_score = round(int(prediction[0]), 2)
         
         # Return the predicted score as a JSON response
         return jsonify({'predicted_Score': predicted_score})
