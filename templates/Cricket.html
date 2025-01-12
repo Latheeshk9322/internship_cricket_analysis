@@ -28,7 +28,7 @@
             width: 100%;
             max-width: 400px;
         }
-
+        
         h1 {
             text-align: center;
             color: #a71b1b;
@@ -197,6 +197,7 @@
         </form>
     </div>
 
+<<<<<<< HEAD
     <!-- Popup Modal -->
     <div class="overlay" id="overlay"></div>
     <div class="modal" id="modal">
@@ -208,6 +209,12 @@
         // Set the default cricket background
         document.body.style.background = "url('Dataset/cricket.jpg') no-repeat center center/cover";
 
+=======
+        <div class="result" id="Predicted_Score"></div>
+    </div>
+
+    <script>
+>>>>>>> df683896b87d2060e0168ca440af0c188453722c
         function predictScore() {
             const data = {
                 overs: document.getElementById('overs').value,
@@ -219,6 +226,7 @@
                 Weather: document.getElementById('Weather').value
             };
 
+<<<<<<< HEAD
             // Simulate prediction response
             const score = Math.floor(Math.random() * 300 + 50); // Random score between 50 and 350
 
@@ -243,6 +251,27 @@
         function closeModal() {
             document.getElementById('modal').classList.remove('show');
             document.getElementById('overlay').classList.remove('show');
+=======
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.error) {
+                        document.getElementById('Predicted_Score').textContent = `Error: ${result.error}`;
+                    } else {
+                        document.getElementById('Predicted_Score').textContent = `Predicted Score: ${result.predicted_Score}`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('Predicted_Score').textContent = 'An error occurred while predicting the score.';
+                });
+>>>>>>> df683896b87d2060e0168ca440af0c188453722c
         }
     </script>
 </body>
