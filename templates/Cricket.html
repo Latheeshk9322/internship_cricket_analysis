@@ -16,8 +16,6 @@
             background: url('Dataset/cricket.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #490bd9;
-            transition: background 1s ease-in-out;
-            
         }
 
         .container {
@@ -28,7 +26,7 @@
             width: 100%;
             max-width: 400px;
         }
-        
+
         h1 {
             text-align: center;
             color: #a71b1b;
@@ -51,13 +49,6 @@
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #2a5298;
-            box-shadow: 0 0 5px rgba(42, 82, 152, 0.5);
         }
 
         .btn {
@@ -70,73 +61,17 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
         .btn:hover {
             background-color: #0056b3;
         }
 
-        /* Popup modal styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            color: #333;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            z-index: 1000;
-        }
-
-        .modal.show {
-            display: block;
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -55%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-
-        .overlay.show {
-            display: block;
-        }
-
-        .close-btn {
+        .result {
             margin-top: 20px;
-            background-color: #2a5298;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .close-btn:hover {
-            background-color: #1e3c72;
+            font-size: 18px;
+            color: #333;
+            text-align: center;
         }
     </style>
 </head>
@@ -148,17 +83,14 @@
                 <label for="overs">Overs Played</label>
                 <input type="number" id="overs" name="overs" min="0" max="50" required>
             </div>
-
             <div class="form-group">
                 <label for="wickets">Wickets Lost</label>
                 <input type="number" id="wickets" name="wickets" min="0" max="10" required>
             </div>
-
             <div class="form-group">
                 <label for="Run_Rate">Run Rate</label>
                 <input type="number" step="0.01" id="Run_Rate" name="Run_Rate" min="0" required>
             </div>
-
             <div class="form-group">
                 <label for="Home_Away">Home/Away</label>
                 <select id="Home_Away" name="Home_Away" required>
@@ -167,12 +99,10 @@
                     <option value="0">Away</option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label for="Opponent_Strength">Opponent Strength</label>
                 <input type="number" id="Opponent_Strength" name="Opponent_Strength" min="0" max="10" required>
             </div>
-
             <div class="form-group">
                 <label for="Pitch_Condition">Pitch Condition</label>
                 <select id="Pitch_Condition" name="Pitch_Condition" required>
@@ -182,7 +112,6 @@
                     <option value="0">Balanced</option>
                 </select>
             </div>
-
             <div class="form-group">
                 <label for="Weather">Weather</label>
                 <select id="Weather" name="Weather" required>
@@ -192,30 +121,13 @@
                     <option value="0">Cloudy</option>
                 </select>
             </div>
-
             <button type="button" class="btn" onclick="predictScore()">Predict Score</button>
         </form>
-    </div>
-
-<<<<<<< HEAD
-    <!-- Popup Modal -->
-    <div class="overlay" id="overlay"></div>
-    <div class="modal" id="modal">
-        <p id="modal-content">Predicted Score: 0</p>
-        <button class="close-btn" onclick="closeModal()">Close</button>
-    </div>
-
-    <script>
-        // Set the default cricket background
-        document.body.style.background = "url('Dataset/cricket.jpg') no-repeat center center/cover";
-
-=======
         <div class="result" id="Predicted_Score"></div>
     </div>
 
     <script>
->>>>>>> df683896b87d2060e0168ca440af0c188453722c
-        function predictScore() {
+        async function predictScore() {
             const data = {
                 overs: document.getElementById('overs').value,
                 wickets: document.getElementById('wickets').value,
@@ -226,53 +138,25 @@
                 Weather: document.getElementById('Weather').value
             };
 
-<<<<<<< HEAD
-            // Simulate prediction response
-            const score = Math.floor(Math.random() * 300 + 50); // Random score between 50 and 350
-
-            // Temporarily change the background to celebration
-            document.body.style.background = "url('Dataset/cele.jpg') no-repeat center center/cover";
-
-            // Show modal
-            showModal(`Predicted Score: ${score}`);
-
-            // Reset the background to cricket theme after a delay
-            setTimeout(() => {
-                document.body.style.background = "url('Dataset/cricket.jpg') no-repeat center center/cover";
-            }, 3000); // 3 seconds delay
-        }
-
-        function showModal(message) {
-            document.getElementById('modal-content').textContent = message;
-            document.getElementById('modal').classList.add('show');
-            document.getElementById('overlay').classList.add('show');
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('show');
-            document.getElementById('overlay').classList.remove('show');
-=======
-            fetch('/predict', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.error) {
-                        document.getElementById('Predicted_Score').textContent = `Error: ${result.error}`;
-                    } else {
-                        document.getElementById('Predicted_Score').textContent = `Predicted Score: ${result.predicted_Score}`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('Predicted_Score').textContent = 'An error occurred while predicting the score.';
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
->>>>>>> df683896b87d2060e0168ca440af0c188453722c
+
+                const result = await response.json();
+
+                if (response.ok && result.predicted_Score !== undefined) {
+                    document.getElementById('Predicted_Score').textContent = `Predicted Score: ${result.predicted_Score}`;
+                } else {
+                    document.getElementById('Predicted_Score').textContent = `Error: ${result.error || 'Unexpected server response'}`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('Predicted_Score').textContent = 'An error occurred while predicting the score.';
+            }
         }
     </script>
 </body>
-
+</html>
